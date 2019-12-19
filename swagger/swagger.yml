@@ -1,0 +1,145 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:4242/'
+info:
+  version: "1.0.0"
+  title: "Koa Swagger"
+  description: "Koa swagger service"
+paths:
+  /register:
+    post:
+      description: ""
+      requestBody:
+        $ref: '#/components/requestBodies/POSTRegister'
+      responses:
+        '200':
+          description: "..."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classic'
+  /login:
+    post:
+      description: ""
+      parameters:
+      - name: token
+        in: query
+        description: ""
+        required: true
+        schema:
+          type: string
+          minLength: 12
+          maxLength: 30
+      requestBody:
+        $ref: '#/components/requestBodies/POSTLogin'
+      responses:
+        '200':
+          description: "...2"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classic'
+  /:
+    get:
+      description: ""
+      parameters:
+      - name: token
+        in: query
+        description: ""
+        required: true
+        schema:
+          type: string
+          minLength: 12
+          maxLength: 30
+      responses:
+        '200':
+          description: "..."
+          content:
+            text/plain:
+              schema:
+                type: string
+                default: ""
+    post:
+      description: ""
+      requestBody:
+        $ref: '#/components/requestBodies/POST'
+      responses:
+        '200':
+          description: "..."
+          content:
+            text/plain:
+              schema:
+                type: string
+                default: "Test"
+components:
+  requestBodies:
+     POSTRegister:
+      description: "toto"
+      required: true
+      content:
+       application/json:
+        schema:
+         $ref: '#/components/schemas/POSTRegister'
+     POSTLogin:
+      description: ""
+      required: false
+      content:
+       application/json:
+        schema:
+         $ref: '#/components/schemas/POSTLogin'
+     POST:
+      description: ""
+      required: false
+      content:
+       application/json:
+        schema:
+         $ref: '#/components/schemas/POST'
+  schemas:
+    POSTRegister:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        firstname:
+          type: "string"
+          minLength: 12
+          maxLength: 30
+        lastname:
+          type: "string"
+        extra:
+          type: "object"
+          $ref: '#/components/schemas/Classic'
+        test:
+          type: "array"
+          
+          items:
+            type: object
+            $ref: '#/components/schemas/POSTRegisterTest'
+        created:
+          type: "date"
+        status:
+          type: "any"
+    Classic:
+      type: "object"
+      properties:
+        message:
+          type: "string"
+        result:
+          type: "boolean"
+    POSTRegisterTest:
+      type: "object"
+      properties:
+        number:
+          type: "number"
+    POSTLogin:
+      type: "object"
+      properties:
+        username:
+          type: "string"
+        password:
+          type: "string"
+    POST:
+      type: "object"
+      properties:
+        token:
+          type: "string"
