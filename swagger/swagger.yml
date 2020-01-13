@@ -1,26 +1,16 @@
 openapi: 3.0.0
 servers:
-  - url: 'http://localhost:4242/'
+  - url: 'http://localhost:5050/'
 info:
   version: "1.0.0"
-  title: "Koa Swagger"
-  description: "Koa swagger service"
+  title: "Example Koa GerJs Server Swagger"
+  description: "In this Swagger document, you can retrieve each route available"
 paths:
-  /register:
-    post:
-      description: ""
-      requestBody:
-        $ref: '#/components/requestBodies/POSTRegister'
-      responses:
-        '200':
-          description: "..."
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Classic'
-  /login:
-    post:
-      description: ""
+  /users/:id:
+    put:
+      description: "This is the main description"
+      tags:
+        - users
       parameters:
       - name: token
         in: query
@@ -30,95 +20,88 @@ paths:
           type: string
           minLength: 12
           maxLength: 30
+      - name: id
+        in: path
+        description: ":id parameter"
+        required: true
       requestBody:
-        $ref: '#/components/requestBodies/POSTLogin'
+        $ref: '#/components/requestBodies/PUTUsersId'
       responses:
         '200':
-          description: "...2"
+          description: "Response description"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Classic'
+  /users:
+    post:
+      description: ""
+      tags:
+        - users
+      requestBody:
+        $ref: '#/components/requestBodies/POSTUsers'
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classic'
+    get:
+      description: ""
+      tags:
+        - users
+      parameters:
+      - name: token
+        in: query
+        description: ""
+        required: true
+        schema:
+          type: string
+          minLength: 12
+          maxLength: 30
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseGETUsers'
   /:
     get:
       description: ""
-      parameters:
-      - name: token
-        in: query
-        description: ""
-        required: true
-        schema:
-          type: string
-          minLength: 12
-          maxLength: 30
       responses:
         '200':
-          description: "..."
+          description: ""
           content:
             text/plain:
               schema:
                 type: string
-                default: ""
-    post:
-      description: ""
-      requestBody:
-        $ref: '#/components/requestBodies/POST'
-      responses:
-        '200':
-          description: "..."
-          content:
-            text/plain:
-              schema:
-                type: string
-                default: "Test"
+                default: "Default reponse"
 components:
   requestBodies:
-     POSTRegister:
-      description: "toto"
+     PUTUsersId:
+      description: ""
       required: true
       content:
        application/json:
         schema:
-         $ref: '#/components/schemas/POSTRegister'
-     POSTLogin:
+         $ref: '#/components/schemas/PUTUsersId'
+     POSTUsers:
       description: ""
-      required: false
+      required: true
       content:
        application/json:
         schema:
-         $ref: '#/components/schemas/POSTLogin'
-     POST:
-      description: ""
-      required: false
-      content:
-       application/json:
-        schema:
-         $ref: '#/components/schemas/POST'
+         $ref: '#/components/schemas/POSTUsers'
   schemas:
-    POSTRegister:
+    PUTUsersId:
       type: "object"
       properties:
         username:
           type: "string"
-        firstname:
-          type: "string"
-          minLength: 12
-          maxLength: 30
         lastname:
           type: "string"
-        extra:
-          type: "object"
-          $ref: '#/components/schemas/Classic'
-        test:
-          type: "array"
-          
-          items:
-            type: object
-            $ref: '#/components/schemas/POSTRegisterTest'
-        created:
-          type: "date"
-        status:
-          type: "any"
     Classic:
       type: "object"
       properties:
@@ -126,20 +109,50 @@ components:
           type: "string"
         result:
           type: "boolean"
-    POSTRegisterTest:
-      type: "object"
-      properties:
-        number:
-          type: "number"
-    POSTLogin:
+        username:
+          type: "string"
+    POSTUsers:
+      type: "array"
+      items:
+        type: "object"
+        $ref: '#/components/schemas/POSTUsersItems'
+    POSTUsersItems:
       type: "object"
       properties:
         username:
           type: "string"
-        password:
+        age:
+          type: "number"
+          minimum: 20
+          maximum: 70
+        firstname:
           type: "string"
-    POST:
+        lastname:
+          type: "string"
+    ResponseGETUsers:
+      type: "array"
+      items:
+        type: "object"
+        $ref: '#/components/schemas/ResponseGETUsersItems'
+    ResponseGETUsersItems:
+      type: "object"
+      properties:
+        test:
+          type: "object"
+          $ref: '#/components/schemas/Classic'
+        test2:
+          type: "array"
+          items:
+            type: "object"
+            $ref: '#/components/schemas/Token'
+        firstname:
+          type: "string"
+        lastname:
+          type: "string"
+    Token:
       type: "object"
       properties:
         token:
           type: "string"
+          minLength: 12
+          maxLength: 30
