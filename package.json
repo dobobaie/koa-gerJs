@@ -1,10 +1,10 @@
 {
-  "name": "@gerjs/koa",
+  "name": "gerjs-koa",
   "version": "0.0.1",
   "description": "Use gerJs library plus use the models to validate and reformat the input/ouput payload in the API",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nyc ava --serial --verbose"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,18 @@
   },
   "homepage": "https://github.com/dobobaie/koa-gerjs#readme",
   "dependencies": {
-    "@gerjs/core": "git+ssh://git@github.com/dobobaie/gerjs.git#master"
+    "gerjs-core": "0.0.3"
+  },
+  "devDependencies": {
+    "@hapi/joi": "^16.1.8",
+    "ava": "^2.1.0",
+    "ava-http": "^1.0.0",
+    "gerjs-test-koa": "git+https://github.com/dobobaie/example-koa-gerjs-server.git",
+    "nyc": "^14.1.1"
+  },
+  "ava": {
+    "files": [
+      "tests/*.test.js"
+    ]
   }
 }
