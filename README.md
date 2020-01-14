@@ -8,28 +8,28 @@ Help us to improve the project by contributing 👥
 ## ☁️ Installation
 
 ```
-$ npm install @gerjs/koa
+$ npm install gerjs-koa
 ```
 
 ## 📝 Usage
 
-Use [@gerjs/core](https://github.com/dobobaie/gerjs) documentation to create `modelsAPI` file. 
+Use [gerjs-core](https://github.com/dobobaie/gerjs) documentation to create `modelsAPI` file. 
 
 ### Initialization
 
 Create a new instance :
+  
+Then create the models. [`Joi`](https://hapi.dev/family/joi/) is required.  
 
 ``` js
 const modelsAPI = require("./models/models");
-const gerJs = require("@gerjs/koa")({
-  // same @gerJs/core options | except `destinationPath` is not available
-  exportTo: 'path/doc', // string ; required
+const gerJs = require("gerjs-koa")({
+  // same gerjs-core options | except `destinationPath` is not available
+  exportTo: 'path/doc', // string ; optional
 })(modelsAPI);
 ```
 
-## ⚙️ Model examples
-
-[`Joi`](https://hapi.dev/family/joi/) is required to create the models 
+## ⚙️ GerJs initialization in Koa side
 
 ``` js
 const Koa = require("koa");
@@ -38,12 +38,12 @@ const router = require("koa-router");
 const app = new Koa();
 
 // please use all the middlewares before
-app.use(gerJs.middleware(router)); // middleware to validate payload and reformat reponse (required)
+app.use(gerJs.middleware(router)); // middleware to validate payload and reformat reponse | required
 
 app.use(
 	router
 	  // routes...
-	  .get("/swagger", gerJs.expose()) // expose the swagger documentation (not required)
+	  .get("/swagger", gerJs.expose()) // expose the swagger documentation | optional
 	  .get("*", ctx => ctx.throw(boom.notFound()))
 	  .routes()
 	);
@@ -53,3 +53,12 @@ app.use(
 ## 👥 Contributing
 
 Please help us to improve the project by contributing :)  
+
+## ❓️ Testing
+
+Clone the repo and run from the project root:
+
+```
+$ npm install
+$ npm test
+```
