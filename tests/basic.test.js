@@ -25,6 +25,12 @@ test("Server initialization", t =>
   .catch(m => t.fail(m))
 );
 
+const swagger_yml_content_file = fs.readFileSync(__dirname + '/../swagger/swagger.yml').toString();
+const swagger_yml_content_file_example = fs.readFileSync(__dirname + '/swagger.example.yml').toString();
+test("[File] - Swagger file", t =>
+  t.is(swagger_yml_content_file, swagger_yml_content_file_example, "difference in file")
+);
+
 const swagger_content_file = fs.readFileSync(__dirname + '/../swagger/index.html').toString();
 test("[Request] - Swagger route", t =>
   request.get(server_url + '/swagger')
@@ -42,7 +48,7 @@ test("[Request] - Defaut route", t =>
   .catch(r => t.fail(r))
 );
 
-test("[Request] - Users route without token", t =>
+test("[Request] - Retrieve users without token", t =>
   request.get(server_url + '/users')
   .then(r =>
     t.fail("request is not supposed to work")
@@ -56,7 +62,7 @@ test("[Request] - Users route without token", t =>
   )
 );
 
-test("[Request] - Users route with a wrong token", t =>
+test("[Request] - Retrieve users with a wrong token", t =>
   request.get(server_url + '/users' + `?token=123`)
   .then(r =>
     t.fail("request is not supposed to work")
@@ -70,18 +76,75 @@ test("[Request] - Users route with a wrong token", t =>
   )
 );
 
-test("[Request] - Users route with a right token", t =>
+test("[Request] - Retrieve users with a right token", t =>
   request.get(server_url + '/users' + `?token=${process.env.AUTH_TOKEN}`)
+  .then(r =>
+    t.deepEqual(
+      r,
+      [{
+        firstname: "Jean", 
+        lastname: "Bernard",
+        test2: [{
+          token: "0123456789abc"
+        }],
+        test: {
+          message: "request done with success",
+          result: true
+        }
+      }],
+      "return a wrong response"
+    )
+  )
+  .catch(r => t.fail(r))
+);
+
+test("[Request] - Create user without data", t =>
+  request.post(server_url + '/users')
   .then(r =>
     t.fail("request is not supposed to work")
   )
   .catch(r =>
     t.deepEqual(r.error, {
       errors: [
-        { code: 'validation_error_token_is_required' }
+        { code: 'validation_error_post_users_must_be_an_array' }
       ]
     }, "return a wrong error")
   )
 );
 
-// validation_error_value_must_be_an_array
+test("[Request] - Create user with wrong age", t =>
+  request.post(server_url + '/users', {
+    body: [{
+      firstname: "Jean", 
+      lastname: "Bernard",
+      age: "abc"
+    }]
+  })
+  .then(r =>
+    t.fail("request is not supposed to work")
+  )
+  .catch(r =>
+    t.deepEqual(r.error, {
+      errors: [
+        { code: 'validation_error_0_age_must_be_a_number' }
+      ]
+    }, "return a wrong error")
+  )
+);
+
+test("[Request] - Create user with good data", t =>
+  request.post(server_url + '/users', {
+    body: [{
+      firstname: "Jean", 
+      lastname: "Bernard",
+      age: 35
+    }]
+  })
+  .then(r =>
+    t.deepEqual(r, {
+      message: 'request done with success',
+      result: true
+    }, "return a wrong response")
+  )
+  .catch(r => t.fail(r))
+);
