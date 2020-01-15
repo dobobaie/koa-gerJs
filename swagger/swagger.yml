@@ -109,8 +109,6 @@ components:
           type: "string"
         result:
           type: "boolean"
-        username:
-          type: "string"
     POSTUsers:
       type: "array"
       items:
