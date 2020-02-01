@@ -1,6 +1,6 @@
 {
   "name": "gerjs-koa",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Use gerJs library plus use the models to validate and reformat the input/ouput payload in the API",
   "main": "lib/index.js",
   "scripts": {
