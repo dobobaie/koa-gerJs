@@ -6,7 +6,7 @@ info:
   title: "Example Koa GerJs Server Swagger"
   description: "In this Swagger document, you can retrieve each route available"
 paths:
-  /users/:id:
+  /users/{id}:
     put:
       description: "This is the main description"
       tags:
